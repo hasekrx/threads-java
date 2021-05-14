@@ -9,11 +9,13 @@ public class PrincipalBathroom {
 
     Thread guest1 = new Thread(new TaskNumber1(bathroom), "Joao");
     Thread guest2 = new Thread(new TaskNumber2(bathroom), "Maria");
-    Thread guest3 = new Thread(new TaskNumber1(bathroom), "Alex");
+
+    Thread limpeza = new Thread(new TaskClean(bathroom), "Clean");
+    limpeza.setDaemon(true);
 
     guest1.start();
     guest2.start();
-    guest3.start();
+    limpeza.start();
 
   }
 
