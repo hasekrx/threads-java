@@ -18,7 +18,7 @@ public class ServidorTarefas {
   public ServidorTarefas() throws IOException {
     System.out.println("--------- Iniciando Servidor ----");
     this.server = new ServerSocket(12345);
-    this.threadPool = Executors.newFixedThreadPool(4);
+    this.threadPool = Executors.newFixedThreadPool(4, new threadFactory());
     this.isRunning = new AtomicBoolean(true);
   }
 
