@@ -3,6 +3,7 @@ package br.com.alura.threads2.tarefas;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -11,11 +12,14 @@ public class DistribuirTarefas implements Runnable {
   private Socket socket;
   private ServidorTarefas server;
   private ExecutorService threadPool;
+  private BlockingQueue<String> filaComandos;
 
-  public DistribuirTarefas(ExecutorService threadPool, Socket socket, ServidorTarefas server) {
+  public DistribuirTarefas(ExecutorService threadPool, BlockingQueue<String> filaComandos,
+      Socket socket, ServidorTarefas server) {
     this.threadPool = threadPool;
     this.socket = socket;
     this.server = server;
+    this.filaComandos = filaComandos;
   }
 
   @Override
@@ -49,6 +53,13 @@ public class DistribuirTarefas implements Runnable {
             Future<String> futureBanco = threadPool.submit(c2Banco);
 
             this.threadPool.submit(new JuntaFuturesWsAndBanco(futureWS, futureBanco, saidaCliente));
+
+            break;
+          }
+
+          case "c3": {
+            this.filaComandos.put(comando); // block the thread
+            saidaCliente.println("comando c3 adicionado na fila");
 
             break;
           }
